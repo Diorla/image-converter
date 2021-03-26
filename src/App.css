@@ -6,14 +6,19 @@
 .image-wrapper {
   display: flex;
   justify-content: space-around;
+  margin: 8px;
 }
 
 .image-container {
-  height: 200px;
+  height: 202px;
   width: 200px;
   border: 1px solid silver;
 }
 
 .image-select > .btn {
   margin: 4px;
+}
+
+div.form-control {
+  margin-bottom: 8px;
 }
