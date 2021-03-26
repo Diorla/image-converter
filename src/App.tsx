@@ -37,7 +37,6 @@ function App() {
               const image = URL.createObjectURL(
                 new Blob([value], { type: imageType })
               );
-
               setUpdated(image);
             }
           });
@@ -55,7 +54,7 @@ function App() {
             src={file || thumbnail}
             alt="uploaded"
             className="img-fluid"
-            height={200}
+            style={{ height: 200 }}
           />
         </div>
         <div className="image-container">
@@ -63,7 +62,7 @@ function App() {
             src={updated || thumbnail}
             alt="updated"
             className="img-fluid"
-            height={200}
+            style={{ height: 200 }}
           />
         </div>
       </div>
@@ -171,11 +170,11 @@ function App() {
               active={imageType === "image/x-icon"}
               onClick={() => setImageType("image/x-icon")}
             />
-            <ButtonSelect
+            {/* <ButtonSelect
               text="svg"
               active={imageType === "image/svg+xml"}
               onClick={() => setImageType("image/svg+xml")}
-            />
+            /> */}
             <ButtonSelect
               text="tiff"
               active={imageType === "image/tiff"}
