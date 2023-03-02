@@ -1,46 +1,93 @@
-# Getting Started with Create React App
+![main-image](./public/image-converter.png)
+# Contents
+- [Contents](#contents)
+- [Badges](#badges)
+- [Features](#features)
+- [Commands](#commands)
+  - [```Install```](#install)
+  - [```Editing```](#editing)
+  - [```Scripts```](#scripts)
+    - [```npm start```](#npm-start)
+    - [```npm run build```](#npm-run-build)
+    - [```npm run test```](#npm-run-test)
+    - [```npm run test:watch```](#npm-run-testwatch)
+- [Technologies](#technologies)
+  - [Frontend](#frontend)
+- [Design](#design)
+- [License](#license)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Badges
+![submission](https://img.shields.io/badge/submission-pending-orange)
+![issues](https://img.shields.io/github/issues/Diorla/image-converter)
+![license](https://img.shields.io/github/license/Diorla/image-converter)
+![code size](https://img.shields.io/github/languages/code-size/diorla/image-converter)
+![forks](https://img.shields.io/github/forks/Diorla/image-converter)
+![stars](https://img.shields.io/github/stars/Diorla/image-converter)
+![programming languages](https://img.shields.io/github/languages/count/diorla/image-converter)
+![top language](https://img.shields.io/github/languages/top/diorla/image-converter)
+![commit status](https://img.shields.io/github/commit-status/diorla/image-converter/main/HEAD)
+![Package version](https://img.shields.io/github/package-json/v/diorla/image-converter)
+![Last commit](https://img.shields.io/github/last-commit/diorla/image-converter)
+![Commit activity](https://img.shields.io/github/commit-activity/w/diorla/image-converter)
 
-## Available Scripts
 
-In the project directory, you can run:
+# Features
 
-### `yarn start`
+This is a single page app that enables the following
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Compressing images
+- Resize images
+- Convert from one type to another
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Commands
 
-### `yarn build`
+## ```Install```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Clone the repo
+```sh
+git clone https://github.com/Diorla/image-converter
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## ```Editing```
+Use any text-editor to update the content
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## ```Scripts```
 
-### `yarn eject`
+### ```npm start```
+To start both server and client.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Opens at localhost:1963
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### ```npm run build```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+build client side with production mode. `Service worker` is available in the production mode.
 
-## Learn More
+### ```npm run test```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+npm run test
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### ```npm run test:watch```
+
+npm run test in watch mode
+
+
+# Technologies
+This is divided into frontend and backend
+
+## Frontend
+This web app was created using `create-react-app`. It uses `react` and `typescript`
+
+![REACT](https://img.shields.io/badge/react-js-4a96ab)
+![TYPESCRIPT](https://img.shields.io/badge/typescript-lang-0074c1)
+
+# Design
+
+- Rough mock-up made with adobe XD. The prototype could be found [here](https://xd.adobe.com/view/9ef40253-48c5-4bce-95ac-5e7ffd3e9396-cba7/screen/9d36ab1e-e03b-45c6-9cfc-bba0481d50e7).
+
+# License
+This is under [MIT](https://choosealicense.com/licenses/mit/) license, for more details, please check [License](https://github.com/Diorla/image-converter/blob/main/LICENCE)
+
+[(Back to top)](#contents)
