@@ -1,21 +1,21 @@
 export default function ButtonSelect({
   text,
-  active,
   onClick,
+  active,
 }: {
   text: string;
-  active: boolean;
   onClick: () => void;
+  active: boolean;
 }) {
   if (active)
     return (
-      <span className="btn btn-primary" onClick={onClick}>
+      <button onClick={onClick} className="btn-select active">
         {text}
-      </span>
+      </button>
     );
   return (
-    <span className="btn btn-secondary" onClick={onClick}>
+    <button className="btn-select" onClick={onClick}>
       {text}
-    </span>
+    </button>
   );
 }
