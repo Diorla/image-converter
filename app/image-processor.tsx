@@ -109,7 +109,7 @@ export default function ImageProcessor() {
   };
 
   return (
-    <div className="mx-auto p-4  bg-gradient-to-br from-blue-300 via-teal-300 to-green-300 w-screen h-screen">
+    <div className="mx-auto p-4  bg-gradient-to-br from-blue-100 via-teal-100 to-green-100 w-screen min-h-screen">
       <div className="container mx-auto">
         <h1 className="text-2xl font-bold mb-4">Image Processor</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
