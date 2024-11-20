@@ -13,13 +13,17 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { useDropzone } from "react-dropzone";
+import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function ImageProcessor() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [processedImageUrl, setProcessedImageUrl] = useState<string | null>(
+    null
+  );
   const [outputFormat, setOutputFormat] = useState("webp");
-  const [quality, setQuality] = useState(100);
+  const [quality, setQuality] = useState(80);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const [processing, setProcessing] = useState(false);
@@ -34,6 +38,7 @@ export default function ImageProcessor() {
         setPreviewUrl(reader.result as string);
       };
       reader.readAsDataURL(file);
+      setProcessedImageUrl(null); // Reset processed image when new image is uploaded
     }
   }, []);
 
@@ -73,18 +78,11 @@ export default function ImageProcessor() {
 
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
-
-      // Create a download link and click it
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `processed-image-${Date.now()}.${outputFormat}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      setProcessedImageUrl(url);
 
       toast({
         title: "Image processed successfully",
-        description: "Your image has been processed and downloaded.",
+        description: "Your image has been processed. You can now download it.",
       });
     } catch (error) {
       console.error("Error processing image:", error);
@@ -99,80 +97,119 @@ export default function ImageProcessor() {
     }
   };
 
+  const handleDownload = () => {
+    if (processedImageUrl) {
+      const link = document.createElement("a");
+      link.href = processedImageUrl;
+      link.download = `${selectedFile?.name}-processed.${outputFormat}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
-      <h1 className="text-2xl font-bold mb-4">Image Processor</h1>
-      <div className="space-y-4">
-        <div
-          {...getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer ${
-            isDragActive ? "border-primary bg-primary/10" : "border-border"
-          }`}
-        >
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p>Drop the image here ...</p>
-          ) : (
-            <p>Drag and drop an image here, or click to select a file</p>
-          )}
-          {selectedFile && (
-            <p className="mt-2">Selected file: {selectedFile.name}</p>
-          )}
-        </div>
-        {previewUrl && (
-          <div className="mt-4">
-            <img src={previewUrl} alt="Preview" className="max-w-full h-auto" />
+    <div className="mx-auto p-4  bg-gradient-to-br from-blue-300 via-teal-300 to-green-300 w-screen h-screen">
+      <div className="container mx-auto">
+        <h1 className="text-2xl font-bold mb-4">Image Processor</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <div
+              {...getRootProps()}
+              className={`border-2 border-dashed border-gray-700 rounded-lg p-4 text-center cursor-pointer h-[400px] flex items-center justify-center ${
+                isDragActive ? "border-primary bg-primary/10" : "border-border"
+              }`}
+            >
+              <input {...getInputProps()} />
+              {processedImageUrl || previewUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={processedImageUrl || previewUrl || ""}
+                  alt="Preview"
+                  className="max-w-full max-h-full object-contain"
+                />
+              ) : isDragActive ? (
+                <p>Drop the image here ...</p>
+              ) : (
+                <p>Drag and drop an image here, or click to select a file</p>
+              )}
+            </div>
+            {selectedFile && (
+              <p className="mt-2 text-sm text-gray-500">
+                Selected file: {selectedFile.name}
+              </p>
+            )}
           </div>
-        )}
-        <div>
-          <Label htmlFor="output-format">Output Format</Label>
-          <Select onValueChange={(value) => setOutputFormat(value)}>
-            <SelectTrigger id="output-format">
-              <SelectValue placeholder="Select output format" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="webp">WebP</SelectItem>
-              <SelectItem value="jpeg">JPEG</SelectItem>
-              <SelectItem value="png">PNG</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="output-format">Output Format</Label>
+              <Select
+                onValueChange={(value) => setOutputFormat(value)}
+                value={outputFormat}
+              >
+                <SelectTrigger id="output-format" className="border-gray-700">
+                  <SelectValue placeholder="Select output format" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="webp">WebP</SelectItem>
+                  <SelectItem value="jpeg">JPEG</SelectItem>
+                  <SelectItem value="png">PNG</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="quality">Quality ({quality}%)</Label>
+              <Slider
+                id="quality"
+                min={1}
+                max={100}
+                step={1}
+                value={[quality]}
+                onValueChange={(value) => setQuality(value[0])}
+              />
+            </div>
+            <div>
+              <Label htmlFor="width">Width (px)</Label>
+              <Input
+                id="width"
+                type="number"
+                min={0}
+                value={width}
+                onChange={(e) => setWidth(parseInt(e.target.value) || 0)}
+                placeholder="Enter width (0 for auto)"
+                className="border-gray-700"
+              />
+            </div>
+            <div>
+              <Label htmlFor="height">Height (px)</Label>
+              <Input
+                id="height"
+                type="number"
+                min={0}
+                value={height}
+                onChange={(e) => setHeight(parseInt(e.target.value) || 0)}
+                placeholder="Enter height (0 for auto)"
+                className="border-gray-700"
+              />
+            </div>
+            <div className="flex space-x-2">
+              <Button
+                onClick={handleProcess}
+                disabled={!selectedFile || processing}
+              >
+                {processing ? "Processing..." : "Process Image"}
+              </Button>
+              <Button
+                onClick={handleDownload}
+                disabled={!processedImageUrl}
+                variant="outline"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download
+              </Button>
+            </div>
+          </div>
         </div>
-        <div>
-          <Label htmlFor="quality">Quality ({quality}%)</Label>
-          <Slider
-            id="quality"
-            min={1}
-            max={100}
-            step={1}
-            value={[quality]}
-            onValueChange={(value) => setQuality(value[0])}
-          />
-        </div>
-        <div>
-          <Label htmlFor="width">Width (px)</Label>
-          <Input
-            id="width"
-            type="number"
-            min={0}
-            value={width}
-            onChange={(e) => setWidth(parseInt(e.target.value) || 0)}
-            placeholder="Enter width (0 for auto)"
-          />
-        </div>
-        <div>
-          <Label htmlFor="height">Height (px)</Label>
-          <Input
-            id="height"
-            type="number"
-            min={0}
-            value={height}
-            onChange={(e) => setHeight(parseInt(e.target.value) || 0)}
-            placeholder="Enter height (0 for auto)"
-          />
-        </div>
-        <Button onClick={handleProcess} disabled={!selectedFile || processing}>
-          {processing ? "Processing..." : "Process Image"}
-        </Button>
       </div>
     </div>
   );
