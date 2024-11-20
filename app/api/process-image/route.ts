@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     return new NextResponse(outputBuffer, {
       headers: {
         "Content-Type": `image/${format}`,
-        "Content-Disposition": `attachment; filename="processed-image.${format}"`,
+        "Content-Disposition": `attachment; filename="processed-image-${Date.now()}.${format}"`,
       },
     });
   } catch (error) {

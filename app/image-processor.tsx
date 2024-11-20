@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,22 +12,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { useDropzone } from "react-dropzone";
 import { useToast } from "@/hooks/use-toast";
 
 export default function ImageProcessor() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [outputFormat, setOutputFormat] = useState("webp");
-  const [quality, setQuality] = useState(80);
+  const [quality, setQuality] = useState(100);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const [processing, setProcessing] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0];
       setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -35,7 +35,12 @@ export default function ImageProcessor() {
       };
       reader.readAsDataURL(file);
     }
-  };
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { "image/*": [] },
+  });
 
   const handleProcess = async () => {
     if (!selectedFile) {
@@ -72,7 +77,7 @@ export default function ImageProcessor() {
       // Create a download link and click it
       const link = document.createElement("a");
       link.href = url;
-      link.download = `processed-image.${outputFormat}`;
+      link.download = `processed-image-${Date.now()}.${outputFormat}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -98,15 +103,21 @@ export default function ImageProcessor() {
     <div className="container mx-auto p-4 max-w-2xl">
       <h1 className="text-2xl font-bold mb-4">Image Processor</h1>
       <div className="space-y-4">
-        <div>
-          <Label htmlFor="image-upload">Select an image</Label>
-          <Input
-            id="image-upload"
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            ref={fileInputRef}
-          />
+        <div
+          {...getRootProps()}
+          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer ${
+            isDragActive ? "border-primary bg-primary/10" : "border-border"
+          }`}
+        >
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <p>Drop the image here ...</p>
+          ) : (
+            <p>Drag and drop an image here, or click to select a file</p>
+          )}
+          {selectedFile && (
+            <p className="mt-2">Selected file: {selectedFile.name}</p>
+          )}
         </div>
         {previewUrl && (
           <div className="mt-4">
