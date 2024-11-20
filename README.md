@@ -1,4 +1,4 @@
-![main-image](./public/image-converter.png)
+![main-image](./public/og-image.png)
 
 # Contents
 
